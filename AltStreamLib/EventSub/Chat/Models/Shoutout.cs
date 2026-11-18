@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Shoutout
     {
         [JsonProperty("target")]
@@ -20,9 +15,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Shoutout() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Shoutout(
-        [property: JsonPropertyName("target")] Author Target
-    );
-#endif
 }

@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Kofi
     {
         [JsonProperty("from")]
@@ -44,15 +39,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Kofi() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Kofi(
-        [property: JsonPropertyName("from")] string From,
-        [property: JsonPropertyName("amount")] string Amount,
-        [property: JsonPropertyName("currencyCode")] string CurrencyCode,
-        [property: JsonPropertyName("message")] string? Message,
-        [property: JsonPropertyName("tierName")] string? TierName,
-        [property: JsonPropertyName("isFirstSubscriptionPayment")] bool? IsFirstSubscriptionPayment,
-        [property: JsonPropertyName("items")] string? Items
-    );
-#endif
 }

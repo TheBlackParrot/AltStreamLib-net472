@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v2.Models
 {
-#if NET481
     public class Redemption
     {
         [JsonProperty("id")]
@@ -52,19 +47,6 @@ namespace AltStreamLib.Api.v2.Models
 
         public Redemption() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Redemption(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("rewardId")] int RewardId,
-        [property: JsonPropertyName("rewardName")] string RewardName,
-        [property: JsonPropertyName("rewardCost")] int RewardCost,
-        [property: JsonPropertyName("userInput")] string? UserInput,
-        [property: JsonPropertyName("status")] string Status,
-        [property: JsonPropertyName("createdAt")] string CreatedAt,
-        [property: JsonPropertyName("updatedAt")] string UpdatedAt,
-        [property: JsonPropertyName("user")] RedemptionUser User
-    );
-#endif
 
     public enum RedemptionStatus
     {

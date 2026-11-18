@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class EmoteInfo
     {
         [JsonProperty("id")]
@@ -31,12 +26,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public EmoteInfo() { }
     }
-#elif NET9_0_OR_GREATER
-    public record EmoteInfo(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("url")] string Url,
-        [property: JsonPropertyName("displayOrder")] int DisplayOrder
-    );
-#endif
 }

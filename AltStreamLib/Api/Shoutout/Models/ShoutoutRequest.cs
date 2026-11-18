@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Shoutout.Models
 {
-#if NET481
     public class ShoutoutRequest
     {
         [JsonProperty("channel")]
@@ -23,10 +18,4 @@ namespace AltStreamLib.Api.Shoutout.Models
 
         public ShoutoutRequest() { }
     }
-#elif NET9_0_OR_GREATER
-    public record ShoutoutRequest(
-        [property: JsonPropertyName("channel")] string Channel,
-        [property: JsonPropertyName("target")] string Target
-    );
-#endif
 }

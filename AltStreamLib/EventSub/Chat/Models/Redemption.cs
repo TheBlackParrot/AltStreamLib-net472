@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Redemption
     {
         [JsonProperty("id")]
@@ -43,15 +38,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Redemption() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Redemption(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("rewardId")] string RewardId,
-        [property: JsonPropertyName("from")] Author From,
-        [property: JsonPropertyName("rewardName")] string RewardName,
-        [property: JsonPropertyName("cost")] int Cost,
-        [property: JsonPropertyName("pointsName")] string PointsName,
-        [property: JsonPropertyName("userInput")] string? UserInput
-    );
-#endif
 }

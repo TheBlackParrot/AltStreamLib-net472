@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Admin.Models
 {
-#if NET481
     public class ChatUser
     {
         [JsonProperty("id")]
@@ -47,16 +42,4 @@ namespace AltStreamLib.Api.Admin.Models
 
         public ChatUser() { }
     }
-#elif NET9_0_OR_GREATER
-    public record ChatUser(
-                [property: JsonPropertyName("id")] string Id,
-                [property: JsonPropertyName("name")] string Name,
-                [property: JsonPropertyName("type")] string Type,
-                [property: JsonPropertyName("image")] string Image,
-                [property: JsonPropertyName("country")] string Country,
-                [property: JsonPropertyName("countryCode")] string CountryCode,
-                [property: JsonPropertyName("flag")] string Flag,
-                [property: JsonPropertyName("joinedAt")] string JoinedAt
-    );
-#endif
 }

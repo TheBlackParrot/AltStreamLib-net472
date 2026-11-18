@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-#endif
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Auth.Models
 {
-#if NET481
     public class AuthTokenRequest
     {
 
@@ -32,12 +27,4 @@ namespace AltStreamLib.Api.Auth.Models
 
         public AuthTokenRequest() { }
     }
-#elif NET9_0_OR_GREATER
-    public record AuthTokenRequest(
-            [property: JsonPropertyName("identifier")] string Identifier,
-            [property: JsonPropertyName("password")] string Password,
-            [property: JsonPropertyName("csrfToken")] string CsrfToken,
-            [property: JsonPropertyName("callbackUrl")] string? CallbackURl = null
-    );
-#endif
 }

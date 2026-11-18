@@ -1,30 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net481</TargetFrameworks>
-    <Title>AltStream Lib</Title>
-    <Version>0.4.34</Version>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Title>AltStreamLib-net472</Title>
+    <Version>0.4.34+net472</Version>
     <Authors>Macha Celeste</Authors>
     <Company>Celestial Corp</Company>
     <Description>A C# wrapper for altstream.online API</Description>
-    <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/MachaCeleste/AltStreamLib</PackageProjectUrl>
-    <PackageIcon>macha_flower_clean_centered.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/TheBlackParrot/AltStreamLib-net472</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/MachaCeleste/AltStreamLib</RepositoryUrl>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework.TrimStart(`net`))'=='9.0'">
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework.TrimStart(`net`))'=='481'">
-    <LangVersion>13.0</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
   
@@ -45,20 +35,17 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="D:\old OS (7)\Users\Haceo\Pictures\macha_flower_clean_centered.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework.TrimStart(`net`))'=='481'">
+  <ItemGroup Condition="'$(TargetFramework.TrimStart(`net`))'=='472'">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SseClientLib" Version="0.3.2" />
+    <Reference Include="SseClientLib">
+      <HintPath>../../SseClientLib/SseClientLib/bin/Release/net472/SseClientLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

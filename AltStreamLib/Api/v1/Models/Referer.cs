@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class Referer
     {
         [JsonProperty("id")]
@@ -27,11 +22,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public Referer() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Referer(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("username")] string Username,
-        [property: JsonPropertyName("name")] string Name
-    );
-#endif
 }

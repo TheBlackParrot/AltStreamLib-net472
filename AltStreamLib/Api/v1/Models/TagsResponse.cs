@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class TagsResponse
     {
         [JsonProperty("channel")]
@@ -23,10 +18,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public TagsResponse() { }
     }
-#elif NET9_0_OR_GREATER
-    public record TagsResponse(
-        [property: JsonPropertyName("channel")] string Channel,
-        [property: JsonPropertyName("tags")] string[] Tags
-    );
-#endif
 }

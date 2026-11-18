@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Raid
     {
         [JsonProperty("to")]
@@ -35,13 +30,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Raid() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Raid(
-        [property: JsonPropertyName("to")] Author? To,
-        [property: JsonPropertyName("from")] Author? From,
-        [property: JsonPropertyName("viewers")] int Viewers,
-        [property: JsonPropertyName("countdownSeconds")] int? CountdownSeconds,
-        [property: JsonPropertyName("startTime")] long? StartTime
-    );
-#endif
 }

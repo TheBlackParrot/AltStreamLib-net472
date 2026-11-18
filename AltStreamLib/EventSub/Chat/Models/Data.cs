@@ -1,14 +1,9 @@
-﻿#if NET481
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Data
     {
         [JsonProperty("id")]
@@ -88,42 +83,4 @@ namespace AltStreamLib.EventSub.Chat.Models
         [EnumMember(Value = "delete")] Delete,
         [EnumMember(Value = "system")] System
     }
-#elif NET9_0_OR_GREATER
-    public record Data(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("type")] MessageType Type,
-        [property: JsonPropertyName("source")] string Source,
-        [property: JsonPropertyName("sentAt")] long SentAt,
-        [property: JsonPropertyName("author")] Author? Author,
-        [property: JsonPropertyName("followedBy")] Author? FollowedBy,
-        [property: JsonPropertyName("message")] Message? Message,
-        [property: JsonPropertyName("reply")] Reply? Reply,
-        [property: JsonPropertyName("redemption")] Redemption? Redemption,
-        [property: JsonPropertyName("raid")] Raid? Raid,
-        [property: JsonPropertyName("shoutout")] Shoutout? Shoutout,
-        [property: JsonPropertyName("kofi")] Kofi? Kofi
-    );
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum MessageType
-    {
-        [JsonStringEnumMemberName("message")] Message,
-        [JsonStringEnumMemberName("reply")] Reply,
-        [JsonStringEnumMemberName("pin")] Pin,
-        [JsonStringEnumMemberName("unpin")] Unpin,
-        [JsonStringEnumMemberName("redemption")] Redemption,
-        [JsonStringEnumMemberName("highlight")] Highlight,
-        [JsonStringEnumMemberName("follow")] Follow,
-        [JsonStringEnumMemberName("tip")] Tip,
-        [JsonStringEnumMemberName("subscription")] Subscription,
-        [JsonStringEnumMemberName("shop")] Shop,
-        [JsonStringEnumMemberName("raid_received")] RaidReceived,
-        [JsonStringEnumMemberName("raid_started")] RaidStarted,
-        [JsonStringEnumMemberName("raid_cancelled")] RaidCancelled,
-        [JsonStringEnumMemberName("shoutout")] Shoutout,
-        [JsonStringEnumMemberName("clear")] Clear,
-        [JsonStringEnumMemberName("delete")] Delete,
-        [JsonStringEnumMemberName("system")] System
-    }
-#endif
 }

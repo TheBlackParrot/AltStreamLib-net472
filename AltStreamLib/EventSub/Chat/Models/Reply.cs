@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Reply
     {
         [JsonProperty("messageId")]
@@ -27,11 +22,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Reply() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Reply(
-        [property: JsonPropertyName("messageId")] string MessageId,
-        [property: JsonPropertyName("messageAuthorDisplayName")] string MessageAuthorDisplayName,
-        [property: JsonPropertyName("messageAuthorChannelName")] string MessageAuthorChannelName
-    );
-#endif
 }

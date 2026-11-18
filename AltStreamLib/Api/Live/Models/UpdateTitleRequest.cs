@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Live.Models
 {
-#if NET481
     public class UpdateTitleRequest
     {
         [JsonProperty("key")]
@@ -27,11 +22,4 @@ namespace AltStreamLib.Api.Live.Models
 
         public UpdateTitleRequest() { }
     }
-#elif NET9_0_OR_GREATER
-    public record UpdateTitleRequest(
-    [property: JsonPropertyName("key")] string Key,
-    [property: JsonPropertyName("title")] string Title,
-    [property: JsonPropertyName("username")] string Username
-);
-#endif
 }

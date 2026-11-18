@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Sticker
     {
         [JsonProperty("url")]
@@ -23,10 +18,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Sticker() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Sticker(
-        [property: JsonPropertyName("url")] string Url,
-        [property: JsonPropertyName("name")] string Name
-    );
-#endif
 }

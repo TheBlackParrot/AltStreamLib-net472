@@ -5,32 +5,21 @@ using AltStreamLib.Api;
 using AltStreamLib.EventSub.Chat.Models;
 using AltStreamLib.Logging;
 using AltStreamLib.Utils;
-
-#if NET481
 using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json;
-#endif
 
 namespace AltStreamLib.EventSub
 {
     public class EventSubClient : IDisposable
     {
         public string ChannelName { get; private set; }
-
-#if NET481
+        
         private readonly SseClient _sseClient;
         private Task _connectionTask;
         private CancellationTokenSource _shutdownCts;
-#elif NET9_0_OR_GREATER
-        private readonly SseClient? _sseClient;
-        private Task? _connectionTask;
-        private CancellationTokenSource? _shutdownCts;
-#endif
 
         private int _reconnectionAttempts;
         private const int MaxReconnectionAttempts = 5;
@@ -143,6 +132,8 @@ namespace AltStreamLib.EventSub
         /// Called when an event is received that doesnt fit any event model
         /// </summary>
         public event Action<Data> OnUnhandledReceived;
+
+        public event Action<string> OnLog;
         #endregion
 
         #region Public Methods
@@ -152,7 +143,7 @@ namespace AltStreamLib.EventSub
         /// <param name="channelName">Channel to connect with</param>
         /// <param name="botToken">Your bots token</param>
         /// <param name="cookiesJson">A json string of your cookies to load. (Only required in <see cref="ApiClient"/> OR <see cref="EventSubClient"/>)</param>
-        public EventSubClient(string channelName, string botToken, string cookiesJson = null)
+        public EventSubClient(string channelName, string botToken = null, string cookiesJson = null)
         {
             if (string.IsNullOrEmpty(channelName))
             {
@@ -286,16 +277,10 @@ namespace AltStreamLib.EventSub
                     _shutdownCts?.Cancel();
                     break;
                 }
-
-#if NET481
+                
                 TimeSpan delay = TimeSpan.FromTicks((long)(_baseReconnectDelay.Ticks
                     * Math.Pow(2, _reconnectionAttempts - 1)))
                     + TimeSpan.FromTicks(new Random().Next(0, 1000) * 10);
-#elif NET9_0_OR_GREATER
-                var delay = _baseReconnectDelay
-                    .Multiply(Math.Pow(2, _reconnectionAttempts - 1))
-                    .Add(TimeSpan.FromMicroseconds(Random.Shared.Next(0, 1000)));
-#endif
 
                 Logger.Singleton?.Log(LogLevel.Info,
                     $"Reconnecting in {delay.TotalSeconds:F1}s " +
@@ -332,7 +317,6 @@ namespace AltStreamLib.EventSub
             {
                 try
                 {
-#if NET481
                     Data data = JsonConvert.DeserializeObject<Data>(payload)
                         ?? throw new NullReferenceException("Packet data is null");
                         
@@ -394,32 +378,6 @@ namespace AltStreamLib.EventSub
                             handler = OnUnhandledReceived;
                             break;
                     }
-#elif NET9_0_OR_GREATER
-                    Data? data = JsonSerializer.Deserialize<Data>(payload)
-                        ?? throw new NullReferenceException("Packet data is null");
-
-                    var handler = data.Type switch
-                    {
-                        MessageType.Message => OnMessageReceived,
-                        MessageType.Reply => OnReplyReceived,
-                        MessageType.Delete => OnMessageDeleted,
-                        MessageType.Pin => OnMessagePinned,
-                        MessageType.Unpin => OnMessageUnPinned,
-                        MessageType.Highlight => OnHighlightReceived,
-                        MessageType.Redemption => OnRedemptionReceived,
-                        MessageType.Follow => OnFollowReceived,
-                        MessageType.Tip => OnTipReceived,
-                        MessageType.Subscription => OnSubscriptionReceived,
-                        MessageType.Shop => OnShopReceived,
-                        MessageType.RaidStarted => OnRaidStarted,
-                        MessageType.RaidCancelled => OnRaidCancelled,
-                        MessageType.RaidReceived => OnRaidReceived,
-                        MessageType.Shoutout => OnShoutoutReceived,
-                        MessageType.Clear => OnClearChatReceived,
-                        MessageType.System => OnSystemMessageReceived,
-                        _ => OnUnhandledReceived
-                    };
-#endif
 
                     handler?.Invoke(data);
                 }
@@ -431,6 +389,7 @@ namespace AltStreamLib.EventSub
 
             _sseClient.OnLog += (string message) =>
             {
+                OnLog?.Invoke(message);
                 Logger.Singleton?.Log(LogLevel.Info, message);
             };
 

@@ -1,13 +1,8 @@
-﻿#if NET481
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-#endif
-using System.Text.Json.Serialization;
 
 namespace AltStreamLib.Api.Chat.Models
 {
-#if NET481
     public class ModResponse
     {
         [JsonProperty("success")]
@@ -22,10 +17,4 @@ namespace AltStreamLib.Api.Chat.Models
             this.Moderators = moderators;
         }
     }
-#elif NET9_0_OR_GREATER
-    public record ModResponse(
-        [property: JsonPropertyName("success")] bool Success,
-        [property: JsonPropertyName("moderators")] List<Moderator> Moderators
-    );
-#endif
 }

@@ -1,13 +1,8 @@
-﻿#if NET481
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class UserSettingsResponse
     {
         [JsonProperty("name")]
@@ -248,63 +243,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public UserSettingsResponse() { }
     }
-#elif NET9_0_OR_GREATER
-    public record UserSettingsResponse(
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("username")] string? Username,
-        [property: JsonPropertyName("image")] string? Image,
-        [property: JsonPropertyName("bio")] string? Bio,
-        [property: JsonPropertyName("pronouns")] string? Pronouns,
-        [property: JsonPropertyName("blueskyUrl")] string? BlueskyUrl,
-        [property: JsonPropertyName("websiteUrl")] string? WebsiteUrl,
-        [property: JsonPropertyName("discordUrl")] string? DiscordUrl,
-        [property: JsonPropertyName("kofiUrl")] string? KofiUrl,
-        [property: JsonPropertyName("bmacUrl")] string? BmacUrl,
-        [property: JsonPropertyName("featuredSupportProvider")] string? FeaturedSupportProvider,
-        [property: JsonPropertyName("vgenUrl")] string? VgenUrl,
-        [property: JsonPropertyName("chatColor")] string? ChatColor,
-        [property: JsonPropertyName("gamingShelf")] List<GameInfo> GamingShelf,
-        [property: JsonPropertyName("offlineImage")] string? OfflineImage,
-        [property: JsonPropertyName("headerImage")] string? HeaderImage,
-        [property: JsonPropertyName("isSubscriber")] bool IsSubscriber,
-        [property: JsonPropertyName("isChannelSubscriber")] bool IsChannelSubscriber,
-        [property: JsonPropertyName("isAltStreamSupporter")] bool IsAltStreamSupporter,
-        [property: JsonPropertyName("altStreamSupporterTier")] string? AltStreamSupporterTier,
-        [property: JsonPropertyName("supporterStickerBonus")] int? SupporterStickerBonus,
-        [property: JsonPropertyName("isChannelSupporter")] bool IsChannelSupporter,
-        [property: JsonPropertyName("channelBadgeImage")] string? ChannelBadgeImage,
-        [property: JsonPropertyName("channelSupporterBadgeImage")] string? ChannelSupporterBadgeImage,
-        [property: JsonPropertyName("isSiteAdmin")] bool IsSiteAdmin,
-        [property: JsonPropertyName("followedAt")] string? FollowedAt,
-        [property: JsonPropertyName("bannedUntil")] string? BannedUntil,
-        [property: JsonPropertyName("userNumber")] int? UserNumber,
-        [property: JsonPropertyName("createdAt")] string? CreatedAt,
-        [property: JsonPropertyName("testerBadge")] string? TesterBadge,
-        [property: JsonPropertyName("referralCount")] int? ReferralCount,
-        [property: JsonPropertyName("isReferralBadgeUnlocked")] bool? IsReferralBadgeUnlocked,
-        [property: JsonPropertyName("channelPointsName")] string? ChannelPointsName,
-        [property: JsonPropertyName("selectedBadges")] string[] SelectedBadges,
-        [property: JsonPropertyName("requireLoginToWatch")] bool? RequireLoginToWatch,
-        [property: JsonPropertyName("allStreamsAdult")] bool? AllStreamsAdult,
-        [property: JsonPropertyName("ageVerified")] bool? AgeVerified,
-        [property: JsonPropertyName("ageVerifiedAt")] string? AgeVerifiedAt,
-        [property: JsonPropertyName("ageVerificationProvider")] string? AgeVerificationProvider,
-        [property: JsonPropertyName("discordUsername")] string? DiscordUsername,
-        [property: JsonPropertyName("twitchUsername")] string? TwitchUsername,
-        [property: JsonPropertyName("hasDiscordLinked")] bool? HasDiscordLinked,
-        [property: JsonPropertyName("hasTwitchLinked")] bool? HasTwitchLinked,
-        [property: JsonPropertyName("discordWebhookUrl")] string? DiscordWebhookUrl,
-        [property: JsonPropertyName("discordWebhookMessage")] string? DiscordWebhookMessage,
-        [property: JsonPropertyName("discordWebhookEnabled")] bool? DiscordWebhookEnabled,
-        [property: JsonPropertyName("discordWebhookMention")] string? DiscordWebhookMention,
-        [property: JsonPropertyName("discordWebhookRoleId")] string? DiscordWebhookRoleId,
-        [property: JsonPropertyName("discordWebhookColor")] string? DiscordWebhookColor,
-        [property: JsonPropertyName("discordWebhookThumbnail")] string? DiscordWebhookThumbnail,
-        [property: JsonPropertyName("discordWebhookBanner")] string? DiscordWebhookBanner,
-        [property: JsonPropertyName("kofiVerificationToken")] string? KofiVerificationToken,
-        [property: JsonPropertyName("bmacWebhookSecret")] string? BmacWebhookSecret,
-        [property: JsonPropertyName("myReferralCode")] string? MyReferralCode,
-        [property: JsonPropertyName("referredBy")] Referer? ReferredBy
-    );
-#endif
 }

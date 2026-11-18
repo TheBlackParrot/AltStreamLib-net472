@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class PanelInfo
     {
         [JsonProperty("id")]
@@ -35,13 +30,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public PanelInfo() { }
     }
-#elif NET9_0_OR_GREATER
-    public record PanelInfo(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("slug")] string Slug,
-        [property: JsonPropertyName("title")] string Title,
-        [property: JsonPropertyName("content")] string Content,
-        [property: JsonPropertyName("displayOrder")] int DisplayOrder
-    );
-#endif
 }

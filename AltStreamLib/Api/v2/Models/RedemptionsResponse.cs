@@ -1,13 +1,8 @@
-﻿#if NET481
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
 
 namespace AltStreamLib.Api.v2.Models
 {
-#if NET481
     public class RedemptionsResponse
     {
         [JsonProperty("redemptions")]
@@ -20,9 +15,4 @@ namespace AltStreamLib.Api.v2.Models
 
         public RedemptionsResponse() { }
     }
-#elif NET9_0_OR_GREATER
-    public record RedemptionsResponse(
-        [property: JsonPropertyName("redemptions")] List<Redemption> Redemptions
-    );
-#endif
 }

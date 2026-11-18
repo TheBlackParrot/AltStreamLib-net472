@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Rewards.Models
 {
-#if NET481
     public class RewardUpdateRequest
     {
         [JsonProperty("id")]
@@ -65,20 +60,4 @@ namespace AltStreamLib.Api.Rewards.Models
 
         public RewardUpdateRequest() { }
     }
-#elif NET9_0_OR_GREATER
-    internal record RewardUpdateRequest(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("username")] string Username,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("cost")] int Cost,
-        [property: JsonPropertyName("enabled")] bool Enabled,
-        [property: JsonPropertyName("isHighlight")] bool IsHighlight,
-        [property: JsonPropertyName("requiresUserInput")] bool RequiresUserInput,
-        [property: JsonPropertyName("cooldownSeconds")] int? CooldownSeconds,
-        [property: JsonPropertyName("globalCooldownSeconds")] int? GlobalCooldownSeconds,
-        [property: JsonPropertyName("maxPerStream")] int? MaxPerStream,
-        [property: JsonPropertyName("maxGlobalPerStream")] int? MaxGlobalPerStream
-    );
-#endif
 }

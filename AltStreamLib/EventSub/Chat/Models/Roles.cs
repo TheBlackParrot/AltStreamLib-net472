@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Roles
     {
         [JsonProperty("broadcaster")]
@@ -39,14 +34,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Roles() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Roles(
-        [property: JsonPropertyName("broadcaster")] bool Broadcaster,
-        [property: JsonPropertyName("moderator")] bool Moderator,
-        [property: JsonPropertyName("channelSubscriber")] bool ChannelSubscriber,
-        [property: JsonPropertyName("altstreamSubscriber")] bool AltstreamSubscriber,
-        [property: JsonPropertyName("follower")] bool Follower,
-        [property: JsonPropertyName("isBot")] bool IsBot
-    );
-#endif
 }

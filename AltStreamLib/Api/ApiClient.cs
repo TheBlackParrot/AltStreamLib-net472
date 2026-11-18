@@ -11,34 +11,26 @@ using AltStreamLib.Api.Live.Models;
 using AltStreamLib.Api.Admin.Models;
 using AltStreamLib.EventSub;
 using AltStreamLib.Utils;
-
-#if NET481
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#endif
+using AltStreamLib.Api.Exceptions;
 
 namespace AltStreamLib.Api
 {
     public class ApiClient : IDisposable
     {
-#if NET481
         public SessionResponse Session { get; private set; }
 
         private StreamKeyResponse _streamKey;
-#elif NET9_0_OR_GREATER
-        public SessionResponse? Session { get; private set; }
-
-        private StreamKeyResponse? _streamKey;
-#endif
 
         /// <summary>
         /// Initialize new API Client.
         /// <para>Rate limit is 60 Requests/minute.</para>
         /// </summary>
-        /// <param name="botToken">Your bots token</param>
+        /// <param name="botToken">Your bots token (can be left null for anonymous API calls where applicable)</param>
         /// <param name="cookiesJson">A json string of your cookies to load. (Only required in <see cref="ApiClient"/> OR <see cref="EventSubClient"/>)</param>
-        public ApiClient(string botToken, string cookiesJson = null)
+        public ApiClient(string botToken = null, string cookiesJson = null)
         {
             if (HttpManager.Singleton is null)
             {
@@ -311,6 +303,11 @@ namespace AltStreamLib.Api
         {
             if (HttpManager.Singleton is not null)
             {
+                if (!HttpManager.Singleton.ProvidedBotToken)
+                {
+                    throw new NotAuthenticatedException();
+                }
+                
                 var message = new PostChatRequest(channelName, content, replyToId);
                 return await HttpManager.Singleton.SendPostRequestAsync<PostChatRequest, RequestResponse>("v2/chat", message);
             }
@@ -327,6 +324,11 @@ namespace AltStreamLib.Api
         {
             if (HttpManager.Singleton is not null)
             {
+                if (!HttpManager.Singleton.ProvidedBotToken)
+                {
+                    throw new NotAuthenticatedException();
+                }
+                
                 var shoutout = new ShoutoutRequest(channel, target);
                 return await HttpManager.Singleton.SendPostRequestAsync<ShoutoutRequest, RequestResponse>("shoutout", shoutout);
             }
@@ -421,6 +423,11 @@ namespace AltStreamLib.Api
         {
             if (HttpManager.Singleton is not null)
             {
+                if (!HttpManager.Singleton.ProvidedBotToken)
+                {
+                    throw new NotAuthenticatedException();
+                }
+                
                 var rewardState = new RewardFulfillmentRequest(redemptionId, channelName, state.ToString().ToLower());
                 return await HttpManager.Singleton.SendPatchRequestAsync<RewardFulfillmentRequest, RequestResponse>("v2/rewards/redemptions", rewardState);
             }

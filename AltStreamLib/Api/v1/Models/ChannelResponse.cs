@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class ChannelResponse
     {
         [JsonProperty("username")]
@@ -39,14 +34,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public ChannelResponse() { }
     }
-#elif NET9_0_OR_GREATER
-    public record ChannelResponse(
-        [property: JsonPropertyName("username")] string Username,
-        [property: JsonPropertyName("displayName")] string DisplayName,
-        [property: JsonPropertyName("avatarUrl")] string AvatarUrl,
-        [property: JsonPropertyName("bio")] string Bio,
-        [property: JsonPropertyName("createdAt")] string CreatedAt,
-        [property: JsonPropertyName("stream")] StreamInfo Stream
-    );
-#endif
 }

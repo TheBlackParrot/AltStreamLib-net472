@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Auth.Models
 {
-#if NET481
     public class RequestResponse
     {
         [JsonProperty("success")]
@@ -19,9 +14,4 @@ namespace AltStreamLib.Api.Auth.Models
 
         public RequestResponse() { }
     }
-#elif NET9_0_OR_GREATER
-public record RequestResponse(
-    [property: JsonPropertyName("success")] bool Success
-);
-#endif
 }

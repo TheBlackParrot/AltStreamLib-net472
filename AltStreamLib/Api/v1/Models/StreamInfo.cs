@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class StreamInfo
     {
         [JsonProperty("isLive")]
@@ -39,14 +34,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public StreamInfo() { }
     }
-#elif NET9_0_OR_GREATER
-    public record StreamInfo(
-        [property: JsonPropertyName("isLive")] bool IsLive,
-        [property: JsonPropertyName("title")] string Title,
-        [property: JsonPropertyName("viewers")] int Viewers,
-        [property: JsonPropertyName("startedAt")] string StartedAt,
-        [property: JsonPropertyName("game")] GameInfo Game,
-        [property: JsonPropertyName("tags")] string[] Tags
-    );
-#endif
 }

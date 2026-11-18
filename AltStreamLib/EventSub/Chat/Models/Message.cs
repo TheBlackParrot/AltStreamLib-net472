@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Message
     {
         [JsonProperty("id")]
@@ -27,11 +22,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Message() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Message(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("text")] string Text,
-        [property: JsonPropertyName("sticker")] Sticker? Sticker
-    );
-#endif
 }

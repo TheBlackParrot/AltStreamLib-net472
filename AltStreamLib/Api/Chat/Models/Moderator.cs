@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Chat.Models
 {
-#if NET481
     public class Moderator
     {
         [JsonProperty("id")]
@@ -39,14 +34,4 @@ namespace AltStreamLib.Api.Chat.Models
 
         public Moderator() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Moderator(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("username")] string Username,
-        [property: JsonPropertyName("userId")] string UserId,
-        [property: JsonPropertyName("createdAt")] string CreatedAt,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("image")] string Image
-    );
-#endif
 }

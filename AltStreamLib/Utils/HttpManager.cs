@@ -1,20 +1,14 @@
 ﻿using System.Net;
-using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Diagnostics;
 using AltStreamLib.Logging;
-using System.Text.Json.Serialization;
-
-#if NET481
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-#elif NET9_0_OR_GREATER
-using System.Text.Json;
-#endif
 
 namespace AltStreamLib.Utils
 {
@@ -24,10 +18,12 @@ namespace AltStreamLib.Utils
 
         internal HttpClient? Client;
         private CookieContainer _cookieContainer = new CookieContainer();
+        
+        internal bool ProvidedBotToken = false;
 
-        internal HttpManager(FileVersionInfo callingInfo, string botToken, string? cookiesJson = null)
+        internal HttpManager(FileVersionInfo callingInfo, string? botToken = null, string? cookiesJson = null)
         {
-            if (Singleton is not null || string.IsNullOrWhiteSpace(botToken)) return;
+            if (Singleton is not null) return;
 
             if (!string.IsNullOrEmpty(cookiesJson))
                 LoadCookieContainerAsync(cookiesJson);
@@ -42,8 +38,12 @@ namespace AltStreamLib.Utils
                 BaseAddress = new Uri("https://altstream.online/api/")
             };
 
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", botToken);
+            if (!string.IsNullOrEmpty(botToken))
+            {
+                ProvidedBotToken = true;
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", botToken);
+            }
 
             Assembly? libAssembly = Assembly.GetExecutingAssembly();
             var libraryInfo = FileVersionInfo.GetVersionInfo(libAssembly.Location);
@@ -65,11 +65,7 @@ namespace AltStreamLib.Utils
 
         internal void LoadCookieContainerAsync(string json)
         {
-#if NET481
-        var cookieList = JsonConvert.DeserializeObject<List<Cookie>>(json);
-#elif NET9_0_OR_GREATER
-            var cookieList = JsonSerializer.Deserialize<List<Cookie>>(json);
-#endif
+            var cookieList = JsonConvert.DeserializeObject<List<Cookie>>(json);
             if (cookieList is not null)
                 foreach (var cookie in cookieList)
                     _cookieContainer.Add(cookie);
@@ -77,34 +73,28 @@ namespace AltStreamLib.Utils
 
         internal async Task<string> GetCookieContainerJsonAsync()
         {
-#if NET481
-        CookieCollection cookies = _cookieContainer.GetCookies(Client.BaseAddress);
-#elif NET9_0_OR_GREATER
-            CookieCollection cookies = _cookieContainer.GetAllCookies();
-#endif
+            CookieCollection cookies = _cookieContainer.GetCookies(Client.BaseAddress);
 
             var cookieList = new List<Cookie>();
             foreach (Cookie cookie in cookies)
                 cookieList.Add(cookie);
-#if NET481
-        string json = JsonConvert.SerializeObject(cookieList);
-#elif NET9_0_OR_GREATER
-            string json = JsonSerializer.Serialize(cookieList, new JsonSerializerOptions { WriteIndented = true });
-#endif
+            
+            string json = JsonConvert.SerializeObject(cookieList);
 
             return json;
         }
 
-
-#if NET481
-    internal async Task<T> SendRequestAsync<T>(string endpoint)
-#elif NET9_0_OR_GREATER
-        internal async Task<T?> SendRequestAsync<T>(string endpoint)
-#endif
+        
+        internal async Task<T> SendRequestAsync<T>(string endpoint)
         {
             try
             {
-                return await Client.GetFromJsonAsync<T>(endpoint);
+                using HttpResponseMessage response = await Client.GetAsync(endpoint);
+                response.EnsureSuccessStatusCode();
+                
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+                
+                //return await Client.GetFromJsonAsync<T>(endpoint);
             }
             catch (HttpRequestException ex)
             {
@@ -117,19 +107,21 @@ namespace AltStreamLib.Utils
                 throw;
             }
         }
-
-#if NET481
-    internal async Task<TResponse> SendPutRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#elif NET9_0_OR_GREATER
-        internal async Task<TResponse?> SendPutRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#endif
+        
+        internal async Task<TResponse> SendPutRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
         {
             try
             {
-                using var response = await Client.PutAsJsonAsync(endpoint, payload);
+                using HttpResponseMessage response =
+                    await Client.PutAsync(endpoint, new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                
+                return JsonConvert.DeserializeObject<TResponse>(await response.Content.ReadAsStringAsync());
+                
+                /*using var response = await Client.PutAsJsonAsync(endpoint, payload);
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadFromJsonAsync<TResponse>();
+                return await response.Content.ReadFromJsonAsync<TResponse>();*/
             }
             catch (HttpRequestException ex)
             {
@@ -147,8 +139,12 @@ namespace AltStreamLib.Utils
         {
             try
             {
-                using var response = await Client.PostAsJsonAsync(endpoint, payload);
+                using HttpResponseMessage response =
+                    await Client.PostAsync(endpoint, new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
+                
+                /*using var response = await Client.PostAsJsonAsync(endpoint, payload);
+                response.EnsureSuccessStatusCode();*/
 
                 return true;
             }
@@ -163,19 +159,21 @@ namespace AltStreamLib.Utils
                 throw;
             }
         }
-
-#if NET481
-    internal async Task<TResponse> SendPostRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#elif NET9_0_OR_GREATER
-        internal async Task<TResponse?> SendPostRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#endif
+        
+        internal async Task<TResponse> SendPostRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
         {
             try
             {
-                using var response = await Client.PostAsJsonAsync(endpoint, payload);
+                using HttpResponseMessage response =
+                    await Client.PostAsync(endpoint, new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                
+                return JsonConvert.DeserializeObject<TResponse>(await response.Content.ReadAsStringAsync());
+                
+                /*using var response = await Client.PostAsJsonAsync(endpoint, payload);
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadFromJsonAsync<TResponse>();
+                return await response.Content.ReadFromJsonAsync<TResponse>();*/
             }
             catch (HttpRequestException ex)
             {
@@ -188,37 +186,26 @@ namespace AltStreamLib.Utils
                 throw;
             }
         }
-
-#if NET481
-    internal async Task<TResponse> SendPatchRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#elif NET9_0_OR_GREATER
-        internal async Task<TResponse?> SendPatchRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
-#endif
+        
+        internal async Task<TResponse> SendPatchRequestAsync<TRequest, TResponse>(string endpoint, TRequest payload)
         {
             try
             {
-#if NET481
-            var json = JsonConvert.SerializeObject(payload);
-#elif NET9_0_OR_GREATER
-                var json = JsonSerializer.Serialize(payload);
-#endif
-                using var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                var json = JsonConvert.SerializeObject(payload);
+                using var content = new StringContent(json, Encoding.UTF8, "application/json");
+                
+                var request = new HttpRequestMessage
+                {
+                    Method = new HttpMethod("PATCH"),
+                    RequestUri = new Uri(Client.BaseAddress, endpoint),
+                    Content = content
+                };
 
-#if NET481
-            var request = new HttpRequestMessage
-            {
-                Method = new HttpMethod("PATCH"),
-                RequestUri = new Uri(Client.BaseAddress, endpoint),
-                Content = content
-            };
-
-            using var response = await Client.SendAsync(request);
-#elif NET9_0_OR_GREATER
-                using var response = await Client.PatchAsync(endpoint, content);
-#endif
+                using var response = await Client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadFromJsonAsync<TResponse>();
+                return JsonConvert.DeserializeObject<TResponse>(await response.Content.ReadAsStringAsync());
+                //return await response.Content.ReadFromJsonAsync<TResponse>();
             }
             catch (HttpRequestException ex)
             {

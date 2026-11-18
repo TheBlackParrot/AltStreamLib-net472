@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.EventSub.Chat.Models
 {
-#if NET481
     public class Author
     {
         [JsonProperty("id")]
@@ -48,16 +43,4 @@ namespace AltStreamLib.EventSub.Chat.Models
 
         public Author() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Author(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("displayName")] string DisplayName,
-        [property: JsonPropertyName("channelName")] string ChannelName,
-        [property: JsonPropertyName("pronouns")] string? Pronouns,
-        [property: JsonPropertyName("image")] string? Image,
-        [property: JsonPropertyName("color")] string? Color,
-        [property: JsonPropertyName("roles")] Roles Roles,
-        [property: JsonPropertyName("badges")] string[] Badges
-    );
-#endif
 }

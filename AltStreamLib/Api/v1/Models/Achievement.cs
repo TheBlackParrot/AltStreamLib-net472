@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class Achievement
     {
         [JsonProperty("id")]
@@ -73,23 +68,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public Progress() { }
     }
-#elif NET9_0_OR_GREATER
-    public record Achievement(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("type")] string Type,
-        [property: JsonPropertyName("category")] string Category,
-        [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("isUnlocked")] bool IsUnlocked,
-        [property: JsonPropertyName("unlockedAt")] string UnlockedAt,
-        [property: JsonPropertyName("unlockedDetails")] string UnlockedDetails,
-        [property: JsonPropertyName("lockedReason")] string LockedReason,
-        [property: JsonPropertyName("progress")] Progress Progress
-    );
-
-    public record Progress(
-        [property: JsonPropertyName("current")] int Current,
-        [property: JsonPropertyName("target")] int Target
-    );
-#endif
 }

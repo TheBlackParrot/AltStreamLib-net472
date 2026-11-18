@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-using System.Text.Json.Serialization;
-#endif
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.Chat.Models
 {
-#if NET481
     public class PostChatRequest
     {
         [JsonProperty("channel")]
@@ -27,11 +22,4 @@ namespace AltStreamLib.Api.Chat.Models
 
         public PostChatRequest() { }
     }
-#elif NET9_0_OR_GREATER
-    internal record PostChatRequest(
-        [property: JsonPropertyName("channel")] string Channel,
-        [property: JsonPropertyName("message")] string Message,
-        [property: JsonPropertyName("replyToId")] string? ReplyToId
-    );
-#endif
 }

@@ -1,12 +1,7 @@
-﻿#if NET481
-using Newtonsoft.Json;
-#elif NET9_0_OR_GREATER
-#endif
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace AltStreamLib.Api.v1.Models
 {
-#if NET481
     public class GameInfo
     {
         [JsonProperty("id")]
@@ -31,12 +26,4 @@ namespace AltStreamLib.Api.v1.Models
 
         public GameInfo() { }
     }
-#elif NET9_0_OR_GREATER
-    public record GameInfo(
-        [property: JsonPropertyName("id")] int Id,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("slug")] string Slug,
-        [property: JsonPropertyName("coverUrl")] string CoverUrl
-    );
-#endif
 }
